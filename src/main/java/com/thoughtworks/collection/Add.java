@@ -1,9 +1,6 @@
 package com.thoughtworks.collection;
 
-//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -59,23 +56,49 @@ public class Add {
                 .reduce(0, Double::sum)/evenList.size();
     }
 
-//    public double getAverageOfEven(List<Integer> arrayList) {
-//        throw new NotImplementedException();
-//    }
-//
-//    public boolean isIncludedInEvenIndex(List<Integer> arrayList, Integer specialElment) {
-//        throw new NotImplementedException();
-//    }
-//
-//    public List<Integer> getUnrepeatedFromEvenIndex(List<Integer> arrayList) {
-//        throw new NotImplementedException();
-//    }
+    public double getAverageOfEven(List<Integer> arrayList) {
+        List<Integer> evenList = arrayList.stream()
+                .filter(num -> num%2 ==0)
+                .collect(Collectors.toList());
 
-//    public List<Integer> sortByEvenAndOdd(List<Integer> arrayList) {
-//        throw new NotImplementedException();
-//    }
+        return  evenList.stream()
+                .mapToDouble(Integer::doubleValue)
+                .reduce(0, Double::sum)/evenList.size();
+    }
 
-//    public List<Integer> getProcessedList(List<Integer> arrayList) {
-//        throw new NotImplementedException();
-//    }
+    public boolean isIncludedInEvenIndex(List<Integer> arrayList, Integer specialElment) {
+        return arrayList.stream()
+                .filter(num -> num%2 ==0)
+                .anyMatch(num-> num== specialElment);
+    }
+
+    public List<Integer> getUnrepeatedFromEvenIndex(List<Integer> arrayList) {
+        List<Integer> evenList = arrayList.stream()
+                .filter(num -> num%2 ==0)
+                .distinct()
+                .collect(Collectors.toList());
+        return evenList;
+    }
+
+    public List<Integer> sortByEvenAndOdd(List<Integer> arrayList) {
+        List<Integer> evenList = arrayList.stream()
+                .filter(num -> num%2 ==0)
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<Integer> oddList = arrayList.stream()
+                .filter(num -> num%2 ==1)
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
+
+        return Stream.concat(evenList.stream(), oddList.stream())
+                .collect(Collectors.toList());
+    }
+
+    public List<Integer> getProcessedList(List<Integer> arrayList) {
+        return IntStream.range(0, arrayList.size() - 1)
+                .map(i ->  ((arrayList.get(i) +  arrayList.get(i+1) ) *3 ))
+                .boxed()
+                .collect(Collectors.toList());
+    }
 }
